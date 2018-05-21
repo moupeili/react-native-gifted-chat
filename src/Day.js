@@ -11,18 +11,15 @@ import { isSameDay, isSameUser, warnDeprecated } from './utils';
 import { DATE_FORMAT } from './Constant';
 
 export default function Day(
-  { dateFormat, currentMessage, previousMessage, nextMessage, containerStyle, wrapperStyle, textStyle, inverted },
+  { dateFormat, currentMessage, previousMessage, containerStyle, wrapperStyle, textStyle },
   context,
 ) {
-  if (!isSameDay(currentMessage, inverted ? previousMessage : nextMessage)) {
+  if (!isSameDay(currentMessage, previousMessage)) {
     return (
       <View style={[styles.container, containerStyle]}>
         <View style={wrapperStyle}>
           <Text style={[styles.text, textStyle]}>
-            {moment(currentMessage.createdAt)
-              .locale(context.getLocale())
-              .format(dateFormat)
-              .toUpperCase()}
+              {currentMessage.createdAt}
           </Text>
         </View>
       </View>
@@ -31,12 +28,14 @@ export default function Day(
   return null;
 }
 
+// {moment(currentMessage.createdAt)
+//     .locale(context.getLocale())
+//     .format(dateFormat)
+//     .toUpperCase()}
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 5,
-    marginBottom: 10,
   },
   text: {
     backgroundColor: Color.backgroundTransparent,
@@ -56,7 +55,6 @@ Day.defaultProps = {
     createdAt: null,
   },
   previousMessage: {},
-  nextMessage: {},
   containerStyle: {},
   wrapperStyle: {},
   textStyle: {},
@@ -69,8 +67,6 @@ Day.defaultProps = {
 Day.propTypes = {
   currentMessage: PropTypes.object,
   previousMessage: PropTypes.object,
-  nextMessage: PropTypes.object,
-  inverted: PropTypes.bool,
   containerStyle: ViewPropTypes.style,
   wrapperStyle: ViewPropTypes.style,
   textStyle: Text.propTypes.style,
